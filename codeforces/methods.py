@@ -53,8 +53,7 @@ class codeforces_method:
 
         --problems, -p                       To get data for problemset.problems
         Optional Parameter:
-        --tags, -t	                     Semicilon-separated list of tags.
-        --problemsetName, -psname	     Custom problemset's short name, like 'acmsguru'        
+        --tags, -t	                     Semicilon-separated list of tags.        
 
 
         --problem-status, -ps                To get data for problemset.recentStatus
@@ -360,13 +359,6 @@ class codeforces_method:
         elif '-t' in list_parameter:
             pos = list_parameter.index('-t')
             param['tags'] = list_parameter[pos+1]
-        
-        if '--problemsetName' in list_parameter:
-            pos = list_parameter.index('--problemsetName')
-            param['problemsetName'] = list_parameter[pos+1]
-        elif '-psname' in list_parameter:
-            pos = list_parameter.index('-psname')
-            param['problemsetName'] = list_parameter[pos+1]
 
         str_ = f"{self.request.ran_num}/problemset.problems?"
         
@@ -381,14 +373,12 @@ class codeforces_method:
         data = []
         for item, item2 in zip(json_data['result']['problems'],json_data['result']['problemStatistics']):
             lst = []
-            lst.append(f"{item['contestId']}{item['index']}")
             lst.append(item['name'])
             lst.append(", ".join(item['tags']))
-            lst.append(item['rating'])
             lst.append(item2['solvedCount'])
             data.append(lst)
         
-        return tabulate(data, headers=["Problem ID", "Problem Name", "Problem Tags", "Problem Rating", "Solved Count"], tablefmt="grid")
+        return tabulate(data, headers=["Problem Name", "Problem Tags", "Solved Count"], tablefmt="grid")
 
     def problems_status(self, list_parameter):
         self.request.url += "problemset.recentStatus"
