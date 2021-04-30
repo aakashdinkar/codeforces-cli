@@ -40,7 +40,7 @@ or
 cf-cli --contest-status --cid 566 -h Gellertke -f 1 -c 10
 `
 
-## output
+## Output
 
 ## Package required:<br>
 - beautifulsoup4
