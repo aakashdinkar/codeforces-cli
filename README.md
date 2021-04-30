@@ -29,10 +29,13 @@ cf-cli [method name] [required parameter with value] [optional paramters with va
 ## Example:
 
 To get details of contest status.
+
 `
 cf-cli --contest-status --constestId 566 --handle Gellertke --from 1 --count 10
 `
+
 or
+
 `
 cf-cli --contest-status --cid 566 -h Gellertke -f 1 -c 10
 `
