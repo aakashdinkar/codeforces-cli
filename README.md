@@ -15,11 +15,11 @@ This package lets you show data for various methods in tabular format in your te
 - user.info
 - user.rating
 - user.status
-<br>
-## How to install ?<br>
-```
+
+## How to install ?
+`
 pip install codeforces-cli
-```
+`
 <br>
 ## How to use ?<br>
 ```
