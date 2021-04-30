@@ -11,9 +11,9 @@ setup(
     description="Command line interface for Codeforces",
     long_description=README,
     long_description_content_type="text/markdown",
-    url="https://github.com/uditvashisht/saral-square",
-    author="Udit Vashisht",
-    author_email="admin@saralgyaan.com",
+    url="https://github.com/aakashdinkar/codeforces-cli",
+    author="Aakash Dinkar",
+    author_email="aakashdinkar1307@gmail.com",
     license="MIT",
     classifiers=[
         "License :: OSI Approved :: MIT License",
