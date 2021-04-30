@@ -41,6 +41,7 @@ cf-cli --contest-status --cid 566 -h Gellertke -f 1 -c 10
 `
 
 ## Output
+![image](https://user-images.githubusercontent.com/35952953/116748281-d720f680-aa1c-11eb-8ed4-eb6342394e3d.png)
 
 ## Package required:<br>
 - beautifulsoup4
