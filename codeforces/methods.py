@@ -11,28 +11,104 @@ class codeforces_method:
 
     def show_help(self):
         print("""
-        --blog-comment                  provide blogentryID for blogEntry.comments
-        --blog-entry                    provide blogentryID for blogEntry.view
-        --contest-hack                  provide contest id for contest.hacks
-        --contest-list                  provide boolean value of gym for contest.list
-        --contest-rating                provide contest id for contest.ratingChanges
-        --contest-status                provide contest id for contest.status
-        --problems                      provide tags for problemset.problems
-        --problem-status                provide the number of count for problemset.recentStatus
-        --user-blog                     provide user name for user.blogEntries
-        --user-info                     provide user name for user.info
-        --user-rating                   provide user name for user.rating
-        --user-status                   provide user name for user.status
+        --blog-comment, -bc                  To get data for blogEntry.comments
+        Required Parameter:
+        --blogEntryId, --bid         	     Id of the blog entry. It can be seen in blog entry URL. 
+                                             For example: /blog/entry/79
+
+
+        --blog-entry, -be                    To get data for blogEntry.view
+        Required Parameter:
+        --blogEntryId, --bid         	     Id of the blog entry. It can be seen in blog entry URL. 
+                                             For example: /blog/entry/79
+
+
+        --contest-hack, -ch                  To get data for contest.hacks
+        Required Parameter:
+        --contestId, --cid         	     Id of the contest. It is not the round number. 
+                                             It can be seen in contest URL. For example: /contest/566/status
+
+
+        --contest-list, -cl                  To get data for contest.list
+        Optional Parameter:
+        --gym, -g                            Boolean. If true — than gym contests are returned. Otherwide, 
+                                             regular contests are returned.
+
+
+        --contest-rating, -cr                To get data for contest.ratingChanges
+        Required Parameter:
+        --contestId, --cid         	     Id of the contest. It is not the round number. 
+                                             It can be seen in contest URL. For example: /contest/566/status
+
+
+        --contest-status, -cs                To get data for contest.status
+        Required Parameter:
+        --contestId, --cid         	     Id of the contest. It is not the round number. 
+                                             It can be seen in contest URL. For example: /contest/566/status
+        Optional Parameters:
+        --handle, -h                         Codeforces user handle
+        --from, -f                           1-based index of the first submission to return
+        --count, -c                          Number of returned submissions
+
+
+        --problems, -p                       To get data for problemset.problems
+        Optional Parameter:
+        --tags, -t	                     Semicilon-separated list of tags.
+        --problemsetName, -psname	     Custom problemset's short name, like 'acmsguru'        
+
+
+        --problem-status, -ps                To get data for problemset.recentStatus
+        Required Parameter:
+        --count, -c	                     Number of submissions to return. Can be up to 1000.
+        Optional Parameter:
+        --problemsetName, -psname	     Custom problemset's short name, like 'acmsguru'
+
+
+        --user-blog, -ub                     To get data for user.blogEntries
+        Required Paramter:
+        --handle, -h	                     Codeforces user handle.
+
+
+        --user-info, -ui                     To get data for user.info
+        Required Paramter:
+        --handle, -h	                     Semicolon-separated list of handles. No more than 10000 handles is accepted.
+
+
+        --user-rating, -ur                   To get data for user.rating
+        Required Paramter:
+        --handle, -h	                     Codeforces user handle.
+
+
+        --user-status, -us                   To get data for user.status
+        Required Paramter:
+        --handle, -h	                     Codeforces user handle.
+        Optional Parameter
+        --from, -f	                     1-based index of the first submission to return.
+        --count, -c	                     Number of returned submissions.
         """)
 
     def blog_comment(self, list_parameter):
         self.request.url += "blogEntry.comments"
         param = {
-            "blogEntryId": list_parameter[0],
             "apikey": self.request.key,
             "time": self.request.time_now
         }
-        str_ = f"{self.request.ran_num}/blogEntry.comments?apikey={param['apikey']}&blogEntryId={param['blogEntryId']}&time={param['time']}#{self.request.key}"
+        if '--blogEntryId' in list_parameter:
+            pos = list_parameter.index('--blogEntryId')
+            param['blogEntryId'] = list_parameter[pos+1]
+        elif '-bid' in list_parameter:
+            pos = list_parameter.index('-bid')
+            param['blogEntryId'] = list_parameter[pos+1]
+        else:
+            return "Please provide blogEntryId.\nType --help, -h for help"
+
+        str_ = f"{self.request.ran_num}/blogEntry.comments?"
+        
+        for key in param:
+            str_ += f"{key}={param[key]}&"
+        
+        str_ +=  f"#{self.request.key}"
+
         result = hashlib.sha512(str_.encode())
         param['apisig'] = f"{self.request.ran_num}{result.hexdigest()}"
         json_data = self.request.make_request(self.request.url, param)
@@ -61,11 +137,25 @@ class codeforces_method:
     def blog_entry(self, list_parameter):
         self.request.url += "blogEntry.view"
         param = {
-            "blogEntryId": list_parameter[0],
             "apikey": self.request.key,
             "time": self.request.time_now
         }
-        str_ = f"{self.request.ran_num}/blogEntry.view?apikey={param['apikey']}&blogEntryId={param['blogEntryId']}&time={param['time']}#{self.request.key}"
+        if '--blogEntryId' in list_parameter:
+            pos = list_parameter.index('--blogEntryId')
+            param['blogEntryId'] = list_parameter[pos+1]
+        elif '-bid' in list_parameter:
+            pos = list_parameter.index('-bid')
+            param['blogEntryId'] = list_parameter[pos+1]
+        else:
+            return "Please provide blogEntryId.\nType --help, -h for help"
+
+        str_ = f"{self.request.ran_num}/blogEntry.view?"
+        
+        for key in param:
+            str_ += f"{key}={param[key]}&"
+        
+        str_ +=  f"#{self.request.key}"
+        
         result = hashlib.sha512(str_.encode())
         param['apisig'] = f"{self.request.ran_num}{result.hexdigest()}"
         json_data = self.request.make_request(self.request.url, param)
@@ -88,11 +178,25 @@ class codeforces_method:
     def contest_hack(self, list_parameter):
         self.request.url += "contest.hacks"
         param = {
-            "contestId": list_parameter[0],
             "apikey": self.request.key,
             "time": self.request.time_now
         }
-        str_ = f"{self.request.ran_num}/contest.hacks?apikey={param['apikey']}&contestId={param['contestId']}&time={param['time']}#{self.request.key}"
+        if '--contestId' in list_parameter:
+            pos = list_parameter.index('--contestId')
+            param['contestId'] = list_parameter[pos+1]
+        elif '-cid' in list_parameter:
+            pos = list_parameter.index('-cid')
+            param['contestId'] = list_parameter[pos+1]
+        else:
+            return "Please provide contestId.\nType --help, -h for help"
+
+        str_ = f"{self.request.ran_num}/contest.hacks?"
+        
+        for key in param:
+            str_ += f"{key}={param[key]}&"
+        
+        str_ +=  f"#{self.request.key}"
+
         result = hashlib.sha512(str_.encode())
         param['apisig'] = f"{self.request.ran_num}{result.hexdigest()}"
         json_data = self.request.make_request(self.request.url, param)
@@ -114,11 +218,23 @@ class codeforces_method:
     def contest_list(self, list_parameter):
         self.request.url += "contest.list"
         param = {
-            "gym": list_parameter[0],
             "apikey": self.request.key,
             "time": self.request.time_now
         }
-        str_ = f"{self.request.ran_num}/contest.list?apikey={param['apikey']}&gym={param['gym']}&time={param['time']}#{self.request.key}"
+        if '--gym' in list_parameter:
+            pos = list_parameter.index('--gym')
+            param['gym'] = list_parameter[pos+1]
+        elif '-g' in list_parameter:
+            pos = list_parameter.index('-g')
+            param['gym'] = list_parameter[pos+1]
+        
+        str_ = f"{self.request.ran_num}/contest.list?"
+        
+        for key in param:
+            str_ += f"{key}={param[key]}&"
+        
+        str_ +=  f"#{self.request.key}"
+
         result = hashlib.sha512(str_.encode())
         param['apisig'] = f"{self.request.ran_num}{result.hexdigest()}"
         json_data = self.request.make_request(self.request.url, param)
@@ -135,11 +251,25 @@ class codeforces_method:
     def contest_rating(self, list_parameter):
         self.request.url += "contest.ratingChanges"
         param = {
-            "contestId": list_parameter[0],
             "apikey": self.request.key,
             "time": self.request.time_now
         }
-        str_ = f"{self.request.ran_num}/contest.ratingChanges?apikey={param['apikey']}&contestId={param['contestId']}&time={param['time']}#{self.request.key}"
+        if '--contestId' in list_parameter:
+            pos = list_parameter.index('--contestId')
+            param['contestId'] = list_parameter[pos+1]
+        elif '-cid' in list_parameter:
+            pos = list_parameter.index('-cid')
+            param['contestId'] = list_parameter[pos+1]
+        else:
+            return "Please provide contestId.\nType --help, -h for help"
+
+        str_ = f"{self.request.ran_num}/contest.ratingChanges?"
+        
+        for key in param:
+            str_ += f"{key}={param[key]}&"
+        
+        str_ +=  f"#{self.request.key}"
+
         result = hashlib.sha512(str_.encode())
         param['apisig'] = f"{self.request.ran_num}{result.hexdigest()}"
         json_data = self.request.make_request(self.request.url, param)
@@ -160,11 +290,46 @@ class codeforces_method:
     def contest_status(self, list_parameter):
         self.request.url += "contest.status"
         param = {
-            "contestId": list_parameter[0],
             "apikey": self.request.key,
             "time": self.request.time_now
         }
-        str_ = f"{self.request.ran_num}/contest.status?apikey={param['apikey']}&contestId={param['contestId']}&time={param['time']}#{self.request.key}"
+        if '--contestId' in list_parameter:
+            pos = list_parameter.index('--contestId')
+            param['contestId'] = list_parameter[pos+1]
+        elif '-cid' in list_parameter:
+            pos = list_parameter.index('-cid')
+            param['contestId'] = list_parameter[pos+1]
+        else:
+            return "Please provide contestId.\nType --help, -h for help"
+
+        if '--handle' in list_parameter:
+            pos = list_parameter.index('--handle')
+            param['handle'] = list_parameter[pos+1]
+        elif '-h' in list_parameter:
+            pos = list_parameter.index('-h')
+            param['handle'] = list_parameter[pos+1]
+        
+        if '--from' in list_parameter:
+            pos = list_parameter.index('--from')
+            param['from'] = list_parameter[pos+1]
+        elif '-f' in list_parameter:
+            pos = list_parameter.index('-f')
+            param['from'] = list_parameter[pos+1]
+        
+        if '--count' in list_parameter:
+            pos = list_parameter.index('--count')
+            param['count'] = list_parameter[pos+1]
+        elif '-c' in list_parameter:
+            pos = list_parameter.index('-c')
+            param['count'] = list_parameter[pos+1]
+            
+        str_ = f"{self.request.ran_num}/contest.status?"
+        
+        for key in param:
+            str_ += f"{key}={param[key]}&"
+        
+        str_ +=  f"#{self.request.key}"
+
         result = hashlib.sha512(str_.encode())
         param['apisig'] = f"{self.request.ran_num}{result.hexdigest()}"
         json_data = self.request.make_request(self.request.url, param)
@@ -185,11 +350,31 @@ class codeforces_method:
     def problems(self, list_parameter):
         self.request.url += "problemset.problems"
         param = {
-            "tags": list_parameter[0],
             "apikey": self.request.key,
             "time": self.request.time_now
         }
-        str_ = f"{self.request.ran_num}/problemset.problems?apikey={param['apikey']}&tags={param['tags']}&time={param['time']}#{self.request.key}"
+        
+        if '--tags' in list_parameter:
+            pos = list_parameter.index('--tags')
+            param['tags'] = list_parameter[pos+1]
+        elif '-t' in list_parameter:
+            pos = list_parameter.index('-t')
+            param['tags'] = list_parameter[pos+1]
+        
+        if '--problemsetName' in list_parameter:
+            pos = list_parameter.index('--problemsetName')
+            param['problemsetName'] = list_parameter[pos+1]
+        elif '-psname' in list_parameter:
+            pos = list_parameter.index('-psname')
+            param['problemsetName'] = list_parameter[pos+1]
+
+        str_ = f"{self.request.ran_num}/problemset.problems?"
+        
+        for key in param:
+            str_ += f"{key}={param[key]}&"
+        
+        str_ +=  f"#{self.request.key}"
+
         result = hashlib.sha512(str_.encode())
         param['apisig'] = f"{self.request.ran_num}{result.hexdigest()}"
         json_data = self.request.make_request(self.request.url, param)
@@ -203,16 +388,38 @@ class codeforces_method:
             lst.append(item2['solvedCount'])
             data.append(lst)
         
-        return tabulate(data, headers=["Problem ID", "Problem Name", "Problem Tags", "Problem Rating", "Solved Count"])
+        return tabulate(data, headers=["Problem ID", "Problem Name", "Problem Tags", "Problem Rating", "Solved Count"], tablefmt="grid")
 
     def problems_status(self, list_parameter):
         self.request.url += "problemset.recentStatus"
         param = {
-            "count": list_parameter[0],
             "apikey": self.request.key,
             "time": self.request.time_now
         }
-        str_ = f"{self.request.ran_num}/problemset.recentStatus?apikey={param['apikey']}&count={param['count']}&time={param['time']}#{self.request.key}"
+        
+        if '--count' in list_parameter:
+            pos = list_parameter.index('--count')
+            param['count'] = list_parameter[pos+1]
+        elif '-c' in list_parameter:
+            pos = list_parameter.index('-c')
+            param['count'] = list_parameter[pos+1]
+        else:
+            return "Please provide count for number of submissions(Max. value upto 100).\nType --help, -h for help"
+        
+        if '--problemsetName' in list_parameter:
+            pos = list_parameter.index('--problemsetName')
+            param['problemsetName'] = list_parameter[pos+1]
+        elif '-psname' in list_parameter:
+            pos = list_parameter.index('-psname')
+            param['problemsetName'] = list_parameter[pos+1]
+
+        str_ = f"{self.request.ran_num}/problemset.recentStatus?"
+        
+        for key in param:
+            str_ += f"{key}={param[key]}&"
+        
+        str_ +=  f"#{self.request.key}"
+
         result = hashlib.sha512(str_.encode())
         param['apisig'] = f"{self.request.ran_num}{result.hexdigest()}"
         json_data = self.request.make_request(self.request.url, param)
@@ -228,17 +435,32 @@ class codeforces_method:
             lst.append(item['verdict'])
             data.append(lst)
         
-        return tabulate(data, headers=["ID", "Problem Id", "Problem Name", "Problem Tags", "Handle", "Language", "Verdict"])
+        return tabulate(data, headers=["ID", "Problem Id", "Problem Name", "Problem Tags", "Handle", "Language", "Verdict"], tablefmt="grid")
 
 
     def user_blog(self, list_parameter):
         self.request.url += "user.blogEntries"
         param = {
-            "handle": list_parameter[0],
             "apikey": self.request.key,
             "time": self.request.time_now
         }
-        str_ = f"{self.request.ran_num}/user.blogEntries?apikey={param['apikey']}&handle={param['handle']}&time={param['time']}#{self.request.key}"
+
+        if '--handle' in list_parameter:
+            pos = list_parameter.index('--handle')
+            param['handle'] = list_parameter[pos+1]
+        elif '-h' in list_parameter:
+            pos = list_parameter.index('-h')
+            param['handle'] = list_parameter[pos+1]
+        else:
+            return "Please provide Codeforces user handle.\nType --help, -h for help"
+
+        str_ = f"{self.request.ran_num}/user.blogEntries?"
+        
+        for key in param:
+            str_ += f"{key}={param[key]}&"
+        
+        str_ +=  f"#{self.request.key}"
+
         result = hashlib.sha512(str_.encode())
         param['apisig'] = f"{self.request.ran_num}{result.hexdigest()}"
         json_data = self.request.make_request(self.request.url, param)
@@ -265,11 +487,26 @@ class codeforces_method:
     def user_info(self, list_parameter):
         self.request.url += "user.info"
         param = {
-            "handle": list_parameter[0],
             "apikey": self.request.key,
             "time": self.request.time_now
         }
-        str_ = f"{self.request.ran_num}/user.info?apikey={param['apikey']}&handle={param['handle']}&time={param['time']}#{self.request.key}"
+
+        if '--handle' in list_parameter:
+            pos = list_parameter.index('--handle')
+            param['handle'] = list_parameter[pos+1]
+        elif '-h' in list_parameter:
+            pos = list_parameter.index('-h')
+            param['handle'] = list_parameter[pos+1]
+        else:
+            return "Please provide Codeforces user handle.\nType --help, -h for help"
+
+        str_ = f"{self.request.ran_num}/user.info?"
+        
+        for key in param:
+            str_ += f"{key}={param[key]}&"
+        
+        str_ +=  f"#{self.request.key}"
+
         result = hashlib.sha512(str_.encode())
         param['apisig'] = f"{self.request.ran_num}{result.hexdigest()}"
         json_data = self.request.make_request(self.request.url, param)
@@ -297,11 +534,26 @@ class codeforces_method:
     def user_rating(self, list_parameter):
         self.request.url += "user.rating"
         param = {
-            "handle": list_parameter[0],
             "apikey": self.request.key,
             "time": self.request.time_now
         }
-        str_ = f"{self.request.ran_num}/user.rating?apikey={param['apikey']}&handle={param['handle']}&time={param['time']}#{self.request.key}"
+
+        if '--handle' in list_parameter:
+            pos = list_parameter.index('--handle')
+            param['handle'] = list_parameter[pos+1]
+        elif '-h' in list_parameter:
+            pos = list_parameter.index('-h')
+            param['handle'] = list_parameter[pos+1]
+        else:
+            return "Please provide Codeforces user handle.\nType --help, -h for help"
+
+        str_ = f"{self.request.ran_num}/user.rating?"
+        
+        for key in param:
+            str_ += f"{key}={param[key]}&"
+        
+        str_ +=  f"#{self.request.key}"
+
         result = hashlib.sha512(str_.encode())
         param['apisig'] = f"{self.request.ran_num}{result.hexdigest()}"
         json_data = self.request.make_request(self.request.url, param)
@@ -321,11 +573,40 @@ class codeforces_method:
     def user_status(self, list_parameter):
         self.request.url += "user.status"
         param = {
-            "handle": list_parameter[0],
             "apikey": self.request.key,
             "time": self.request.time_now
         }
-        str_ = f"{self.request.ran_num}/user.blogEntries?apikey={param['apikey']}&handle={param['handle']}&time={param['time']}#{self.request.key}"
+
+        if '--handle' in list_parameter:
+            pos = list_parameter.index('--handle')
+            param['handle'] = list_parameter[pos+1]
+        elif '-h' in list_parameter:
+            pos = list_parameter.index('-h')
+            param['handle'] = list_parameter[pos+1]
+        else:
+            return "Please provide Codeforces user handle.\nType --help, -h for help"
+        
+        if '--from' in list_parameter:
+            pos = list_parameter.index('--from')
+            param['from'] = list_parameter[pos+1]
+        elif '-f' in list_parameter:
+            pos = list_parameter.index('-f')
+            param['from'] = list_parameter[pos+1]
+        
+        if '--count' in list_parameter:
+            pos = list_parameter.index('--count')
+            param['count'] = list_parameter[pos+1]
+        elif '-c' in list_parameter:
+            pos = list_parameter.index('-c')
+            param['count'] = list_parameter[pos+1]
+
+        str_ = f"{self.request.ran_num}/user.status?"
+        
+        for key in param:
+            str_ += f"{key}={param[key]}&"
+        
+        str_ +=  f"#{self.request.key}"
+
         result = hashlib.sha512(str_.encode())
         param['apisig'] = f"{self.request.ran_num}{result.hexdigest()}"
         json_data = self.request.make_request(self.request.url, param)
