@@ -1,12 +1,12 @@
 import pathlib
-from setuptools import setup
+from setuptools import setup, find_packages
 
 HERE = pathlib.Path(__file__).parent
 
 README = (HERE / "README.md").read_text()
 
 setup(
-    name="saral-square",
+    name="codeforces-cli",
     version="1.0.0",
     description="Command line interface for Codeforces",
     long_description=README,
@@ -21,9 +21,9 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
     ],
-    packages=["codeforces"],
+    packages=find_packages(),
+    install_requires=['requests', 'tabulate', 'beautifulsoup4'],
     include_package_data=True,
-    install_requires=[],
     entry_points={
         "console_scripts": [
             "codeforeces=codeforeces.__main__:codeforces",
