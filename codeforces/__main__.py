@@ -30,7 +30,7 @@ def codeforces():
         "--user-status": code_method.user_status,
         "-us": code_method.user_status
     }
-    if len(sys.argv) < 3 and sys.argv[-1] == '--help':
+    if len(sys.argv) < 3 and sys.argv[-1] == '--help' or sys.argv[-1] == '-h':
         code_method.show_help()
     elif sys.argv[1] in switcher:
         list_parameter = sys.argv[2:]
