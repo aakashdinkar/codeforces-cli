@@ -23,7 +23,7 @@ pip install codeforces-cli
 
 ## How to use ?
 `
-cf-cli [method name] [required parameter with value] [optional paramters with value]
+python -m codeforces [method name] [required parameter with value] [optional paramters with value]
 `
 
 ## Example:
@@ -31,21 +31,37 @@ cf-cli [method name] [required parameter with value] [optional paramters with va
 To get details of contest status.
 
 `
-cf-cli --contest-status --constestId 566 --handle Gellertke --from 1 --count 10
+
+python -m codeforces --contest-status --constestId 566 --handle Gellertke --from 1 --count 10
 `
 
 or
 
 `
-cf-cli --contest-status --cid 566 -h Gellertke -f 1 -c 10
+python -m codeforces -cs -cid 566 -h Gellertke -f 1 -c 10
 `
 
 ## Output
 ![image](https://user-images.githubusercontent.com/35952953/116748281-d720f680-aa1c-11eb-8ed4-eb6342394e3d.png)
+
+## For help
+
+`
+python -m codeforces --help
+`
+
+or
+
+`
+python -m codeforces -h
+`
+
+![image](https://user-images.githubusercontent.com/35952953/116816381-4f9fc880-ab7f-11eb-84a8-609ca987f1d7.png)
+
 
 ## Package required:<br>
 - beautifulsoup4
 - requests
 - tabulate
 
-Thanks for installing
+Thanks for Installing! 
