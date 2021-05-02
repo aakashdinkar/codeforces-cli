@@ -1,4 +1,4 @@
-from methods import codeforces_method
+from codeforces.methods import codeforces_method
 import sys
 
 def codeforces():
@@ -30,11 +30,13 @@ def codeforces():
         "--user-status": code_method.user_status,
         "-us": code_method.user_status
     }
-    if len(sys.argv) < 3 and sys.argv[-1] == '--help' or sys.argv[-1] == '-h':
+    if len(sys.argv) ==1  or sys.argv[-1] == '--help' or sys.argv[-1] == '-h':
         code_method.show_help()
     elif sys.argv[1] in switcher:
-        list_parameter = sys.argv[2:]
+        list_parameter = sys.argv[1:]
         print(switcher[sys.argv[1]](list_parameter))
+    else:
+        print("Please enter the correct format to get the data.\nType --help, -h for help")
 
 if __name__ == '__main__':
     codeforces()

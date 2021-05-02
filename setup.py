@@ -7,7 +7,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="codeforces-cli",
-    version="1.0.0",
+    version="1.0",
     description="Command line interface for Codeforces",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -21,8 +21,10 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
     ],
-    packages=find_packages(),
+    # packages=find_packages(),
+    packages = ['codeforces'],
     install_requires=['requests', 'tabulate', 'beautifulsoup4'],
+    keyword = ['cf-cli'],
     include_package_data=True,
     entry_points={
         "console_scripts": [
