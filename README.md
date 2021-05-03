@@ -1,5 +1,5 @@
 # Codeforces-cli
-## Python package
+## Python package ![pypi](https://pypi.org/static/images/logo-small.6eef541e.svg)
 This package lets you show data for various methods in tabular format in your terminal.
 
 ### These following methods you can run:<br>
